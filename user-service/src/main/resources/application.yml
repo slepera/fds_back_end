@@ -6,10 +6,12 @@ spring:
     name: user-service
   data:
     mongodb:
-      user: u4nbdinxuhjwlb1sfraa
+      authentication-database: bw4akzgkumz3gdj
+      username: u4nbdinxuhjwlb1sfraa
       password: iZxFAGAwsZGuVJlovyBI
-      uri: mongodb://bw4akzgkumz3gdj-mongodb.services.clever-cloud.com:27017/bw4akzgkumz3gdj
-
+      database: bw4akzgkumz3gdj
+      port: 27017
+      host: bw4akzgkumz3gdj-mongodb.services.clever-cloud.com
 
 jwt:
   secret: BvPHGM8C0ia4uOuxxqPD5DTbWC9F9TWvPStp3pb7ARo0oK2mJ3pd3YG4lxA9i8bj6OTbadwezxgeEByY
