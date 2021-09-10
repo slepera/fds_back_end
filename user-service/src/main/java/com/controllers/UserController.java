@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -29,5 +31,10 @@ public class UserController {
     @GetMapping(value = "/secure")
     public String getSecure() {
         return "Secure endpoint available";
+    }
+
+    @GetMapping(value = "/all")
+    public List<User> getAll() {
+        return userService.getAll() ;
     }
 }
