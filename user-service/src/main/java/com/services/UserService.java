@@ -3,10 +3,13 @@ package com.services;
 import com.entities.User;
 import com.entities.value_objects.Department;
 import com.entities.value_objects.ResponseTemplateVO;
+import com.mongodb.BasicDBObject;
 import com.repos.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,5 +46,9 @@ public class UserService {
         Department department = restTemplate.getForObject("http://department-service/departments/" + user.getDepartmentId(), Department.class);
 
         return new ResponseTemplateVO(user, department);
+    }
+
+    public User authenticate(User user) {
+        return this.repository.findByEmail(user.getEmail());
     }
 }

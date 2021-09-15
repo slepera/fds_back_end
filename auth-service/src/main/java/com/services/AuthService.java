@@ -2,6 +2,7 @@ package com.services;
 
 import com.entities.AuthRequest;
 import com.entities.AuthResponse;
+import com.entities.LoginRequest;
 import com.entities.value_objects.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -26,7 +27,7 @@ public class AuthService {
         //do validation if user already exists
         authRequest.setPassword(BCrypt.hashpw(authRequest.getPassword(), BCrypt.gensalt()));
 
-        UserVO userVO = restTemplate.postForObject("http://user-service/users", authRequest, UserVO.class);
+        UserVO userVO = restTemplate.postForObject("http://user-service/register", authRequest, UserVO.class);
         Assert.notNull(userVO, "Failed to register user. Please try again later");
 
         String accessToken = jwt.generate(userVO, "ACCESS");
@@ -34,5 +35,21 @@ public class AuthService {
 
         return new AuthResponse(accessToken, refreshToken);
 
+    }
+
+    public AuthResponse login(LoginRequest loginRequest) {
+        //do validation if user already exists
+        loginRequest.setPassword(BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt()));
+
+        UserVO userVO = restTemplate.postForObject("http://user-service/login", loginRequest, UserVO.class);
+
+        System.out.println(userVO.getEmail());
+
+        Assert.notNull(userVO, "Failed to login user. Please try again later");
+
+        String accessToken = jwt.generate(userVO, "ACCESS");
+        String refreshToken = jwt.generate(userVO, "REFRESH");
+
+        return new AuthResponse(accessToken, refreshToken);
     }
 }

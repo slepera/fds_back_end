@@ -10,16 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public User save(@RequestBody User user) {
+    @PostMapping(value = "/register")
+    public User register(@RequestBody User user) {
         return userService.save(user);
     }
+
+    @PostMapping(value = "/login")
+    public User login(@RequestBody User user) {
+        return userService.authenticate(user);
+    }
+
 
     @GetMapping
     public ResponseTemplateVO getUser(
