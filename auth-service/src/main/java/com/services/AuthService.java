@@ -37,19 +37,22 @@ public class AuthService {
 
     }
 
-    public AuthResponse login(LoginRequest loginRequest) {
+    public UserVO login(LoginRequest loginRequest) {
         //do validation if user already exists
         loginRequest.setPassword(BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt()));
 
         UserVO userVO = restTemplate.postForObject("http://user-service/login", loginRequest, UserVO.class);
 
-        System.out.println(userVO.getEmail());
-
-        Assert.notNull(userVO, "Failed to login user. Please try again later");
+        if(userVO==null)
+        {
+            return new UserVO();
+        }
 
         String accessToken = jwt.generate(userVO, "ACCESS");
         String refreshToken = jwt.generate(userVO, "REFRESH");
 
-        return new AuthResponse(accessToken, refreshToken);
+        userVO.setToken(accessToken);
+
+        return userVO;
     }
 }

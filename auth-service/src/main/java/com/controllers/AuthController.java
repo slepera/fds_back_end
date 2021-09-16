@@ -3,6 +3,7 @@ package com.controllers;
 import com.entities.AuthRequest;
 import com.entities.AuthResponse;
 import com.entities.LoginRequest;
+import com.entities.value_objects.UserVO;
 import com.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<UserVO> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
