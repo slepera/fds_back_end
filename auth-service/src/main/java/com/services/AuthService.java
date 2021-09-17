@@ -23,20 +23,17 @@ public class AuthService {
         this.jwt = jwt;
     }
 
-    public JWTToken register(User user) {
+    public UserVO register(User user) {
         //do validation if user already exists
         String salt =  BCrypt.gensalt();
         String password = BCrypt.hashpw(user.getPassword(), salt);
         user.setPassword(password);
         user.setSalt(salt);
         UserVO userVO = restTemplate.postForObject("http://user-service/register", user, UserVO.class);
-        Assert.notNull(userVO, "Failed to register user. Please try again later");
-
-        String accessToken = jwt.generate(userVO, "ACCESS");
-        String refreshToken = jwt.generate(userVO, "REFRESH");
-
-        return new JWTToken(accessToken, refreshToken);
-
+        if (userVO == null){
+            return new UserVO();
+        }
+        return userVO;
     }
 
     public UserVO login(LoginRequest loginRequest) {

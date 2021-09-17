@@ -31,7 +31,10 @@ public class UserService {
 
 
     public User save(User user) {
-        return this.repository.save(user);
+        if(this.repository.findByEmail(user.getEmail())==null){
+            return this.repository.save(user);
+        }
+        return null;
     }
 
     public User getById(ObjectId id) {

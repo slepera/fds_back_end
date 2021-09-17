@@ -24,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<JWTToken> register(@RequestBody User authRequest) {
+    public ResponseEntity<UserVO> register(@RequestBody User authRequest) {
         return ResponseEntity.ok(authService.register(authRequest));
     }
 
