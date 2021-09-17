@@ -14,6 +14,7 @@ public class GatewayConfig {
     @Autowired
     AuthenticationFilter filter;
 
+
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()

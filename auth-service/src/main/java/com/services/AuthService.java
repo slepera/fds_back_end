@@ -1,8 +1,8 @@
 package com.services;
 
-import com.entities.AuthRequest;
-import com.entities.AuthResponse;
+import com.entities.JWTToken;
 import com.entities.LoginRequest;
+import com.entities.User;
 import com.entities.value_objects.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -23,36 +23,38 @@ public class AuthService {
         this.jwt = jwt;
     }
 
-    public AuthResponse register(AuthRequest authRequest) {
+    public JWTToken register(User user) {
         //do validation if user already exists
-        authRequest.setPassword(BCrypt.hashpw(authRequest.getPassword(), BCrypt.gensalt()));
-
-        UserVO userVO = restTemplate.postForObject("http://user-service/register", authRequest, UserVO.class);
+        String salt =  BCrypt.gensalt();
+        String password = BCrypt.hashpw(user.getPassword(), salt);
+        user.setPassword(password);
+        user.setSalt(salt);
+        UserVO userVO = restTemplate.postForObject("http://user-service/register", user, UserVO.class);
         Assert.notNull(userVO, "Failed to register user. Please try again later");
 
         String accessToken = jwt.generate(userVO, "ACCESS");
         String refreshToken = jwt.generate(userVO, "REFRESH");
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new JWTToken(accessToken, refreshToken);
 
     }
 
     public UserVO login(LoginRequest loginRequest) {
         //do validation if user already exists
-        loginRequest.setPassword(BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt()));
-
         UserVO userVO = restTemplate.postForObject("http://user-service/login", loginRequest, UserVO.class);
-
         if(userVO==null)
         {
             return new UserVO();
         }
-
-        String accessToken = jwt.generate(userVO, "ACCESS");
-        String refreshToken = jwt.generate(userVO, "REFRESH");
-
-        userVO.setToken(accessToken);
-
-        return userVO;
+        String password = userVO.getPassword();
+        String salt = userVO.getSalt();
+        if(((BCrypt.hashpw(loginRequest.getPassword(), salt)).equals(password)))
+        {
+            String accessToken = jwt.generate(userVO, "ACCESS");
+            String refreshToken = jwt.generate(userVO, "REFRESH");
+            userVO.setToken(accessToken);
+            return userVO;
+        }
+        return new UserVO();
     }
 }

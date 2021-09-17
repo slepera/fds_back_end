@@ -49,6 +49,7 @@ public class UserService {
     }
 
     public User authenticate(User user) {
-        return this.repository.findByEmail(user.getEmail());
+        User user1 = this.repository.findByEmail(user.getEmail());
+        return user1;
     }
 }

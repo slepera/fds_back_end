@@ -1,8 +1,8 @@
 package com.controllers;
 
-import com.entities.AuthRequest;
-import com.entities.AuthResponse;
+import com.entities.JWTToken;
 import com.entities.LoginRequest;
+import com.entities.User;
 import com.entities.value_objects.UserVO;
 import com.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<JWTToken> register(@RequestBody User authRequest) {
         return ResponseEntity.ok(authService.register(authRequest));
     }
 
