@@ -13,7 +13,7 @@
         <module>discovery-service</module>
         <module>gateway-service</module>
         <module>user-service</module>
-        <module>departments-service</module>
+        <module>log-service</module>
         <module>auth-service</module>
     </modules>
 

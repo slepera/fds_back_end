@@ -1,0 +1,16 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: log-service
+  datasource:
+    username: uqiqrf3ae3eo7tep
+    password: W1uRj2qfAzukKLgMLDXr
+    url: jdbc:mysql://b7c6bxkiztedyuahpq3l-mysql.services.clever-cloud.com:3306/b7c6bxkiztedyuahpq3l
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
