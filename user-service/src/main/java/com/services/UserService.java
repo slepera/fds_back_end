@@ -1,8 +1,7 @@
 package com.services;
 
 import com.entities.User;
-import com.entities.value_objects.Department;
-import com.entities.value_objects.ResponseTemplateVO;
+
 import com.mongodb.BasicDBObject;
 import com.repos.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +42,6 @@ public class UserService {
 
     public List<User> getAll(){return this.repository.findAll();}
 
-    public ResponseTemplateVO getUserWithDepartment(String id) {
-        User user = this.getById(new ObjectId(id));
-
-        Department department = restTemplate.getForObject("http://department-service/departments/" + user.getDepartmentId(), Department.class);
-
-        return new ResponseTemplateVO(user, department);
-    }
 
     public User authenticate(User user) {
         User user1 = this.repository.findByEmail(user.getEmail());

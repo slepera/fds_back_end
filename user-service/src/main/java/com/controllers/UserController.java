@@ -1,7 +1,6 @@
 package com.controllers;
 
 import com.entities.User;
-import com.entities.value_objects.ResponseTemplateVO;
 import com.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +24,6 @@ public class UserController {
         return userService.authenticate(user);
     }
 
-
-    @GetMapping
-    public ResponseTemplateVO getUser(
-            @RequestHeader(value = "id") String userId,
-            @RequestHeader(value = "role") String role) {
-        return userService.getUserWithDepartment(userId);
-    }
 
     @GetMapping(value = "/secure")
     public String getSecure() {
