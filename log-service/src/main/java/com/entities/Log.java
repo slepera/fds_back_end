@@ -11,6 +11,15 @@ public class Log {
     private String date;
     private String level;
     private String component;
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public long getId() {
         return id;
