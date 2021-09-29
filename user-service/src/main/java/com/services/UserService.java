@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
@@ -19,7 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -41,7 +44,7 @@ public class UserService {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         logTable.date = formatter.format(date);
-        logTable.level = "Trace";
+        logTable.level = "Info";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -57,6 +60,14 @@ public class UserService {
                 new HttpEntity<Log>(logTable, headers);
         this.restTemplate.postForObject("http://log-service/log", request, String.class);
         return null;
+    }
+
+    public String provaSftp(String path){
+        final String url = "http://ext-com-service/sftp_client/put/{id}";
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("id",path);
+        this.restTemplate.put(url,null, param);
+        return "ok";
     }
 
     public User getById(ObjectId id) {

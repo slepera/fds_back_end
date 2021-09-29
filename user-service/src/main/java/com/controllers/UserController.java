@@ -3,6 +3,7 @@ package com.controllers;
 import com.entities.User;
 import com.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,8 @@ public class UserController {
         return userService.authenticate(user);
     }
 
+    @PutMapping(value = "/put/{id}")
+    public String provaSftp(@PathVariable("id") String id){ return userService.provaSftp(id);}
 
     @GetMapping(value = "/secure")
     public String getSecure() {
