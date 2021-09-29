@@ -39,23 +39,18 @@ public class UserService {
 
 
     public User save(User user) {
-        Log logTable = new Log();
-        logTable.component = "UserService";
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-        logTable.date = formatter.format(date);
-        logTable.level = "Info";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         if(this.repository.findByEmail(user.getEmail())==null){
-            logTable.message = "New user signed up";
+            String message = "New user signed up";
+            Log logTable = LogService.createLog("Info", "UserService",  message);
             HttpEntity<Log> request =
                     new HttpEntity<Log>(logTable, headers);
             this.restTemplate.postForObject("http://log-service/log", request, String.class);
             return this.repository.save(user);
         }
-        logTable.message = "Attempt to register a new user failed.";
+        String message = "Attempt to register a new user failed.";
+        Log logTable = LogService.createLog("Warning", "UserService",  message);
         HttpEntity<Log> request =
                 new HttpEntity<Log>(logTable, headers);
         this.restTemplate.postForObject("http://log-service/log", request, String.class);
