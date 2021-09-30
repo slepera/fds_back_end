@@ -1,16 +1,28 @@
 package com.services;
 
 import com.entities.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Service
 public class LogService {
 
-    static public HttpEntity<Log> createLog (String level, String component, String message){
+    private final RestTemplate restTemplate;
+    @Autowired
+    LogService(RestTemplate restTemplate)
+    {
+        this.restTemplate = restTemplate;
+    }
+
+    public void sendLog(String level, String component, String message){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -24,6 +36,6 @@ public class LogService {
 
         HttpEntity<Log> request =
                 new HttpEntity<Log>(log, headers);
-        return request;
+        this.restTemplate.postForObject("http://log-service/log", request, String.class);
     }
 }

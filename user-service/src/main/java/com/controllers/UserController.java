@@ -25,9 +25,6 @@ public class UserController {
         return userService.authenticate(user);
     }
 
-    @PutMapping(value = "/put/{id}")
-    public String provaSftp(@PathVariable("id") String id){ return userService.provaSftp(id);}
-
     @GetMapping(value = "/secure")
     public String getSecure() {
         return "Secure endpoint available";

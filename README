@@ -1,5 +1,5 @@
 Ports, endpoints and methods:
-- Gateway: 8443
+- Gateway: 8443 (HTTPS to be used)
     - GET users/all: get all registered users (auth token required);
     - POST auth/login: sign in a user (requires email and password in JSON body);
     - POST auth/register: register a new user (requires email and password in JSON body);
@@ -7,7 +7,10 @@ Ports, endpoints and methods:
     - PUT ecs/sftp_client/put/{file_name}: send a file through sftp protocol (auth token required);
     - PUT users/put/{file_name}: example of cross request between different services;
 
-Direct access to specific service (do not need auth token):
-- 8443/users --> 9002
-- 8443/auth --> 9002
-- 8443/ecs --> 9003
+Direct access to specific service (do not need auth token, HTTP to be used):
+gateway --> 8443
+discovery --> 8761
+users --> 9002
+auth --> 9004
+ecs --> 9003
+log --> 9001
