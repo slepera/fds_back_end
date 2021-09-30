@@ -39,20 +39,13 @@ public class UserService {
 
 
     public User save(User user) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+
         if(this.repository.findByEmail(user.getEmail())==null){
-            String message = "New user signed up";
-            Log logTable = LogService.createLog("Info", "UserService",  message);
-            HttpEntity<Log> request =
-                    new HttpEntity<Log>(logTable, headers);
+            HttpEntity<Log> request = LogService.createLog("Info", "UserService",  "New user signed up");
             this.restTemplate.postForObject("http://log-service/log", request, String.class);
             return this.repository.save(user);
         }
-        String message = "Attempt to register a new user failed.";
-        Log logTable = LogService.createLog("Warning", "UserService",  message);
-        HttpEntity<Log> request =
-                new HttpEntity<Log>(logTable, headers);
+        HttpEntity<Log> request = LogService.createLog("Warning", "UserService",  "Attempt to register a new user failed.");
         this.restTemplate.postForObject("http://log-service/log", request, String.class);
         return null;
     }
@@ -74,6 +67,13 @@ public class UserService {
 
     public User authenticate(User user) {
         User user1 = this.repository.findByEmail(user.getEmail());
+        HttpEntity<Log> request;
+        if(user1!=null){
+            request = LogService.createLog("Info", "UserService",  "User " + user.getEmail() + " logged in.");
+        }else{
+            request = LogService.createLog("Info", "UserService",  "User authentication failed  for " + user.getEmail());
+        }
+        this.restTemplate.postForObject("http://log-service/log", request, String.class);
         return user1;
     }
 }
