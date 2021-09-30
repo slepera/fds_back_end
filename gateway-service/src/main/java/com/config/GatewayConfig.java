@@ -29,6 +29,10 @@ public class GatewayConfig {
                 .route("ext-com-service", r -> r.path("/ecs/**")
                         .filters(f -> f.filter(filter).stripPrefix(1))
                         .uri("lb://ext-com-service"))
+
+                .route("log-service", r -> r.path("/log/**")
+                        .filters(f -> f.filter(filter).stripPrefix(1))
+                        .uri("lb://log-service"))
                 .build();
     }
 
