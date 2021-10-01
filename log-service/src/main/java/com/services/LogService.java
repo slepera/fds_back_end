@@ -5,6 +5,8 @@ import com.repos.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LogService {
 
@@ -22,5 +24,13 @@ public class LogService {
     public Log getById(long id) {
         return this.logRepository.findById(id)
                 .orElse(null);
+    }
+
+    public List<Log> getAllLog(){
+        return this.logRepository.findAll();
+    }
+
+    public List<Log> findAllByLastId(Long id){
+        return this.logRepository.findByIdGreaterThan(id);
     }
 }

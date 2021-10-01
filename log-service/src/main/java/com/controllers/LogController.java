@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,6 +27,11 @@ public class LogController {
     @GetMapping("/{id}")
     public Log getById(@PathVariable long id) {
         return logService.getById(id);
+    }
+
+    @GetMapping("/last/{id}")
+    public List<Log> getAll(@PathVariable long id){
+        return logService.findAllByLastId(id);
     }
 
     @GetMapping("/stream-sse-mvc")
