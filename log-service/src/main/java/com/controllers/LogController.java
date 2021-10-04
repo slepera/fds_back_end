@@ -4,6 +4,7 @@ import com.entities.Log;
 import com.services.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalTime;
@@ -29,30 +30,28 @@ public class LogController {
         return logService.getById(id);
     }
 
-    @GetMapping("/last/{id}")
-    public List<Log> getAll(@PathVariable long id){
-        return logService.findAllByLastId(id);
-    }
 
-    @GetMapping("/stream-sse-mvc")
-    public SseEmitter streamSseMvc() {
-        SseEmitter emitter = new SseEmitter(-1L);
-        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
-        sseMvcExecutor.execute(() -> {
+    private ExecutorService bakers = Executors.newFixedThreadPool(5);
+    @GetMapping("/last/{id}")
+    public DeferredResult<List<Log>> getAll(@PathVariable long id) {
+        DeferredResult<List<Log>> output = new DeferredResult<>(5000L);
+        output.onTimeout(() -> output.setErrorResult("the bakery is not responding in allowed time"));
+        bakers.execute(() -> {
             try {
-                for (int i = 0; true; i++) {
-                    SseEmitter.SseEventBuilder event = SseEmitter.event()
-                            .data("SSE MVC - " + LocalTime.now().toString())
-                            .id(String.valueOf(i))
-                            .name("sse event - mvc");
-                    emitter.send(event);
+                List<Log> res;
+                while((res = logService.findAllByLastId(id)).size()==0)
+                {
                     Thread.sleep(1000);
                 }
-            } catch (Exception ex) {
-                emitter.completeWithError(ex);
+                output.setResult(res);
+            } catch (Exception e) {
+                System.out.println("eccezione in thread");
+                System.out.println(e);
+                return;
             }
         });
-        return emitter;
+        return output;
     }
+
 
 }
