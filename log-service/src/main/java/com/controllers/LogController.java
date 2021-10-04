@@ -31,27 +31,25 @@ public class LogController {
     }
 
 
-    private ExecutorService bakers = Executors.newFixedThreadPool(5);
+    private ExecutorService log_thread = Executors.newFixedThreadPool(5);
     @GetMapping("/last/{id}")
     public DeferredResult<List<Log>> getAll(@PathVariable long id) {
-        DeferredResult<List<Log>> output = new DeferredResult<>(5000L);
-        output.onTimeout(() -> output.setErrorResult("the bakery is not responding in allowed time"));
-        bakers.execute(() -> {
+        DeferredResult<List<Log>> output = new DeferredResult<>(-1L);
+        log_thread.execute(() -> {
+            int loop_count = 0;
             try {
                 List<Log> res;
-                while((res = logService.findAllByLastId(id)).size()==0)
+                while(((res = logService.findAllByLastId(id)).size()==0)&&(loop_count<10))
                 {
                     Thread.sleep(1000);
+                    loop_count++;
                 }
                 output.setResult(res);
             } catch (Exception e) {
-                System.out.println("eccezione in thread");
                 System.out.println(e);
                 return;
             }
         });
         return output;
     }
-
-
 }
