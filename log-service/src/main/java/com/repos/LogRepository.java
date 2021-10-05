@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface LogRepository extends JpaRepository<Log, Long> {
 
-    @Query(value = "SELECT * FROM log WHERE id >= :lastId", nativeQuery = true)
+    @Query(value = "SELECT * FROM log WHERE id >= :lastId order by id desc limit 20", nativeQuery = true)
     List<Log> findByIdGreaterThan(
             @Param("lastId") Long lastId);
 }
