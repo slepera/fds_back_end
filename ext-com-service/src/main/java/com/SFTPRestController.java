@@ -1,4 +1,4 @@
-package fds.sftp;
+package com;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

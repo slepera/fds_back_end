@@ -1,19 +1,13 @@
-package fds.sftp;
+package com;
 
 
 import org.apache.sshd.server.session.ServerSession;
-import org.apache.sshd.sftp.server.DirectoryHandle;
 import org.apache.sshd.sftp.server.FileHandle;
 import org.apache.sshd.sftp.server.Handle;
 import org.apache.sshd.sftp.server.SftpEventListener;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class SFTPListener implements SftpEventListener {

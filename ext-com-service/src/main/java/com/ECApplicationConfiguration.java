@@ -1,4 +1,4 @@
-package fds.sftp;
+package com;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @ConfigurationProperties(prefix="sftp")
-public class SftpApplicationConfiguration {
+public class ECApplicationConfiguration {
     private String server_host;
     private int server_port;
     private String server_username;
