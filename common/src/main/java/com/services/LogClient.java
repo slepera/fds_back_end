@@ -19,12 +19,12 @@ public class LogClient {
 
     @Bean
     @LoadBalanced
-    RestTemplate restTemplate() {
+    RestTemplate restTemplateLogClient() {
         return new RestTemplate();
     }
 
     @Autowired
-    RestTemplate restTemplate;
+    RestTemplate restTemplateLogClient;
 
     public void sendLog(String level, String component, String message)
     {
@@ -41,6 +41,6 @@ public class LogClient {
 
         HttpEntity<Log> request =
                 new HttpEntity<Log>(log, headers);
-        this.restTemplate.postForObject("http://log-service/log", request, String.class);
+        this.restTemplateLogClient.postForObject("http://log-service/log", request, String.class);
     }
 }

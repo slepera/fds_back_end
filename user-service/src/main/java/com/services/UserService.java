@@ -19,25 +19,21 @@ public class UserService {
 
     private final UserRepository repository;
     private final LogClient logClient;
+    private final ECClient ecClient;
+
     @Autowired
-    public UserService(LogClient logClient, UserRepository repository) {
+    public UserService(LogClient logClient, ECClient ecClient, UserRepository repository) {
         this.repository = repository;
         this.logClient = logClient;
+        this.ecClient = ecClient;
     }
-
 
     public User save(User user) {
-
         if(this.repository.findByEmail(user.getEmail())==null){
-            this.logClient.sendLog("Info", "UserService",  "New user signed up");
-
             return this.repository.save(user);
         }
-        this.logClient.sendLog( "Warning", "UserService",  "Attempt to register a new user failed.");
         return null;
     }
-
-
 
     public User getById(ObjectId id) {
         return this.repository.findById(id).orElse(null);
@@ -48,15 +44,16 @@ public class UserService {
         return this.repository.findAll();
     }
 
+    public String putSftp(String path){
+        return ecClient.putSftp(path);
+    }
+
+    public String getSftp(String path){
+        return ecClient.getSftp(path);
+    }
 
     public User authenticate(User user) {
         User user1 = this.repository.findByEmail(user.getEmail());
-        HttpEntity<Log> request;
-        if(user1!=null && user1.getPassword().equals(BCrypt.hashpw(user.getPassword(), user1.getSalt()))){
-            this.logClient.sendLog( "Info", "UserService",  "User " + user.getEmail() + " logged in.");
-        }else{
-            this.logClient.sendLog("Warning", "UserService",  "User authentication failed  for " + user.getEmail());
-        }
         return user1;
     }
 }

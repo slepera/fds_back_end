@@ -23,6 +23,16 @@ public class UserController {
         return userService.authenticate(user);
     }
 
+    @PutMapping(value = "/sftp_put/{path}")
+    public String sftp_put(@PathVariable String path) {
+        return userService.putSftp(path);
+    }
+
+    @GetMapping(value = "/sftp_get/{path}")
+    public String sftp_get(@PathVariable String path) {
+        return userService.getSftp(path);
+    }
+
     @GetMapping(value = "/secure")
     public String getSecure() {
         return "Secure endpoint available";
