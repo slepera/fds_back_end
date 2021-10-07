@@ -18,22 +18,22 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository repository;
-    private final LogService logService;
+    private final LogClient logClient;
     @Autowired
-    public UserService(LogService logService, UserRepository repository) {
+    public UserService(LogClient logClient, UserRepository repository) {
         this.repository = repository;
-        this.logService = logService;
+        this.logClient = logClient;
     }
 
 
     public User save(User user) {
 
         if(this.repository.findByEmail(user.getEmail())==null){
-            this.logService.sendLog("Info", "UserService",  "New user signed up");
+            this.logClient.sendLog("Info", "UserService",  "New user signed up");
 
             return this.repository.save(user);
         }
-        this.logService.sendLog( "Warning", "UserService",  "Attempt to register a new user failed.");
+        this.logClient.sendLog( "Warning", "UserService",  "Attempt to register a new user failed.");
         return null;
     }
 
@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public List<User> getAll(){
-        this.logService.sendLog( "Info", "UserService",  "TestLog");
+        this.logClient.sendLog( "Info", "UserService",  "TestLog");
         return this.repository.findAll();
     }
 
@@ -53,9 +53,9 @@ public class UserService {
         User user1 = this.repository.findByEmail(user.getEmail());
         HttpEntity<Log> request;
         if(user1!=null && user1.getPassword().equals(BCrypt.hashpw(user.getPassword(), user1.getSalt()))){
-            this.logService.sendLog( "Info", "UserService",  "User " + user.getEmail() + " logged in.");
+            this.logClient.sendLog( "Info", "UserService",  "User " + user.getEmail() + " logged in.");
         }else{
-            this.logService.sendLog("Warning", "UserService",  "User authentication failed  for " + user.getEmail());
+            this.logClient.sendLog("Warning", "UserService",  "User authentication failed  for " + user.getEmail());
         }
         return user1;
     }

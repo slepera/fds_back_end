@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class LogService {
+public class LogClient {
 
     @Bean
     @LoadBalanced
