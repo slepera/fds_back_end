@@ -1,6 +1,5 @@
 package com.controllers;
 
-import com.entities.JWTToken;
 import com.entities.LoginRequest;
 import com.entities.User;
 import com.entities.value_objects.UserVO;

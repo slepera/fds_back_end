@@ -1,6 +1,5 @@
 package com.entities;
 
-import org.springframework.stereotype.Component;
 
 public class Log {
     public String date;
