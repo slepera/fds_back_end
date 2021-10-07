@@ -4,6 +4,7 @@ import com.entities.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,13 +17,14 @@ import java.util.Date;
 @Service
 public class LogService {
 
-
-    RestTemplate restTemplate;
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Autowired
-    public LogService(RestTemplate restTemplateService) {
-        this.restTemplate = restTemplateService;
-    }
+    RestTemplate restTemplate;
 
     public void sendLog(String level, String component, String message)
     {
