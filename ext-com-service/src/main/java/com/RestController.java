@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@RestController
+@org.springframework.web.bind.annotation.RestController
 @RequestMapping("/sftp_client")
-public class SFTPRestController {
+public class RestController {
     @Autowired
     private SFTPClient sftpClient;
 
