@@ -13,12 +13,6 @@ import java.io.*;
 
 @Service
 public class SFTPClient {
-    private final LogClient logClient;
-
-    @Autowired
-    public SFTPClient(LogClient logClient) {
-        this.logClient = logClient;
-    }
 
     @Autowired
     private ECApplicationConfiguration ECApplicationConfiguration;
@@ -36,12 +30,10 @@ public class SFTPClient {
                 {
                     outputStream.write(i);
                 }
-                logClient.sendLog("Info", "AuthService",  "New user signed up");
                 outputStream.close();
                 fileInputStream.close();
-                logClient.sendLog("Info", "External Communication Service", "File "+path+" successfully transferred");
             } catch (Exception e){
-                logClient.sendLog("Error", "External Communication Service", "Error in file receiving file.");
+                System.out.println(e);
             }
         }
     }
@@ -63,9 +55,8 @@ public class SFTPClient {
                 }
                 fileOutputStream.close();
                 inputStream.close();
-                logClient.sendLog("Info", "External Communication Service", "File "+path+" successfully transferred");
             }catch (Exception e){
-                logClient.sendLog("Error", "External Communication Service", "Error in file sending file.");
+                System.out.println(e);
             }
         }
     }

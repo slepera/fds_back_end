@@ -1,10 +1,12 @@
 package com;
 
 
+import com.services.LogClient;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.sftp.server.FileHandle;
 import org.apache.sshd.sftp.server.Handle;
 import org.apache.sshd.sftp.server.SftpEventListener;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,12 @@ public class SFTPListener implements SftpEventListener {
 
     static int file_size;
     static int data_len;
+
+    private final LogClient logClient;
+
+    public SFTPListener(LogClient logClient) {
+        this.logClient = logClient;
+    }
 
     @Override
     public void initialized(ServerSession session, int version) throws IOException {
@@ -36,6 +44,7 @@ public class SFTPListener implements SftpEventListener {
     @Override
     public void closing(ServerSession session, String remoteHandle, Handle localHandle){
         System.out.println("File size: " +  SFTPListener.data_len);
+        logClient.sendLog("Info", "External Communication Service", "File "+" successfully transferred");
         SFTPListener.data_len = 0;
     }
 

@@ -16,6 +16,7 @@
         <module>auth-service</module>
         <module>ext-com-service</module>
         <module>common</module>
+        <module>stubs</module>
     </modules>
 
     <parent>

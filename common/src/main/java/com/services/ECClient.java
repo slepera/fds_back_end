@@ -11,14 +11,15 @@ import java.util.Map;
 
 @Service
 public class ECClient {
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplateECClient() {
-        return new RestTemplate();
-    }
+
+    private final RestTemplate restTemplateECClient;
 
     @Autowired
-    RestTemplate restTemplateECClient;
+    public ECClient(RestTemplate restTemplateECClient) {
+        this.restTemplateECClient = restTemplateECClient;
+    }
+
+
 
     public String putSftp(String path){
         final String url = "http://ext-com-service/sftp_client/put/{id}";
@@ -29,7 +30,6 @@ public class ECClient {
     }
 
     public String getSftp(String path){
-        System.out.println(path);
         final String url = "http://ext-com-service/sftp_client/get/{id}";
         Map<String, String> param = new HashMap<String, String>();
         param.put("id",path);

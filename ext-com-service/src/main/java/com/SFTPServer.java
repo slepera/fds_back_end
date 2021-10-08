@@ -1,6 +1,7 @@
 package com;
 
 
+import com.services.LogClient;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.sftp.server.SftpSubsystemFactory;
@@ -16,6 +17,13 @@ import java.util.Collections;
 
 @Service
 public class SFTPServer {
+    private final LogClient logClient;
+
+    @Autowired
+    public SFTPServer(LogClient logClient) {
+        this.logClient = logClient;
+    }
+
     @Autowired
     private ECApplicationConfiguration ECApplicationConfiguration;
     @PostConstruct
@@ -30,7 +38,7 @@ public class SFTPServer {
 
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(path));
         SftpSubsystemFactory factory = new SftpSubsystemFactory();
-        factory.addSftpEventListener(new SFTPListener());
+        factory.addSftpEventListener(new SFTPListener(logClient));
         sshd.setSubsystemFactories(Collections.singletonList(factory));
         sshd.setPasswordAuthenticator((username, password, session) -> username.equals(ECApplicationConfiguration.getServer_username()) && password.equals(ECApplicationConfiguration.getServer_password()));
 

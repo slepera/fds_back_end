@@ -17,14 +17,14 @@ import java.util.Date;
 @Service
 public class LogClient {
 
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplateLogClient() {
-        return new RestTemplate();
-    }
+    private final RestTemplate restTemplateLogClient;
 
     @Autowired
-    RestTemplate restTemplateLogClient;
+    public LogClient(RestTemplate restTemplateLogClient) {
+        this.restTemplateLogClient = restTemplateLogClient;
+    }
+
+
 
     public void sendLog(String level, String component, String message)
     {

@@ -18,14 +18,10 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository repository;
-    private final LogClient logClient;
-    private final ECClient ecClient;
 
     @Autowired
-    public UserService(LogClient logClient, ECClient ecClient, UserRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
-        this.logClient = logClient;
-        this.ecClient = ecClient;
     }
 
     public User save(User user) {
@@ -40,16 +36,7 @@ public class UserService {
     }
 
     public List<User> getAll(){
-        this.logClient.sendLog( "Info", "UserService",  "TestLog");
         return this.repository.findAll();
-    }
-
-    public String putSftp(String path){
-        return ecClient.putSftp(path);
-    }
-
-    public String getSftp(String path){
-        return ecClient.getSftp(path);
     }
 
     public User authenticate(User user) {
