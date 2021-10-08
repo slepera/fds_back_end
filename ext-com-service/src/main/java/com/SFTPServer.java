@@ -18,21 +18,21 @@ import java.util.Collections;
 @Service
 public class SFTPServer {
     private final LogClient logClient;
+    private final ECApplicationConfiguration ecApplicationConfiguration;
 
     @Autowired
-    public SFTPServer(LogClient logClient) {
+    public SFTPServer(LogClient logClient, ECApplicationConfiguration ecApplicationConfiguration) throws IOException {
         this.logClient = logClient;
+        this.ecApplicationConfiguration = ecApplicationConfiguration;
     }
 
-    @Autowired
-    private ECApplicationConfiguration ECApplicationConfiguration;
     @PostConstruct
-    public void SFTPServer() throws IOException
+    public void Initialize() throws IOException
     {
 
         SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setHost(ECApplicationConfiguration.getServer_host());
-        sshd.setPort(ECApplicationConfiguration.getServer_port());
+        sshd.setHost(ecApplicationConfiguration.getServer_host());
+        sshd.setPort(ecApplicationConfiguration.getServer_port());
         Path path = Paths.get("host.ser");
         //Path path2 = Paths.get("host.ser");
 
@@ -40,9 +40,9 @@ public class SFTPServer {
         SftpSubsystemFactory factory = new SftpSubsystemFactory();
         factory.addSftpEventListener(new SFTPListener(logClient));
         sshd.setSubsystemFactories(Collections.singletonList(factory));
-        sshd.setPasswordAuthenticator((username, password, session) -> username.equals(ECApplicationConfiguration.getServer_username()) && password.equals(ECApplicationConfiguration.getServer_password()));
-
+        sshd.setPasswordAuthenticator((username, password, session) -> username.equals(ecApplicationConfiguration.getServer_username()) && password.equals(ecApplicationConfiguration.getServer_password()));
         //sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(path2));
         sshd.start();
     }
+
 }
