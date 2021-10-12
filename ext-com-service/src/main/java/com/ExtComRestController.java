@@ -1,5 +1,6 @@
 package com;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
@@ -8,10 +9,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,20 +50,6 @@ public class ExtComRestController {
     public void HTTPInternalPost(@RequestParam("ext_url") String ext_url, @RequestParam("local_path") String local_path) throws IOException {
         System.out.println(ext_url);
         System.out.println(local_path);
-
-//        var xmlHttpRequest = new XMLHttpRequest();
-//
-//        var file = ...file handle...
-//        var fileName = ...file name...
-//        var target = ...target...
-//        var mimeType = ...mime type...
-//
-//        xmlHttpRequest.open('POST', target, true);
-//        xmlHttpRequest.setRequestHeader('Content-Type', mimeType);
-//        xmlHttpRequest.setRequestHeader('Content-Disposition', 'attachment; filename="' + fileName + '"');
-//        xmlHttpRequest.send(file);
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -75,11 +62,25 @@ public class ExtComRestController {
 
 
     @GetMapping ("/external/http/get/{int_url}")
-    public void HTTPExternalGet(@PathVariable("ext_url") String int_url) throws IOException {
+    public void HTTPExternalGet(@PathVariable("int_url") String int_url, HttpServletResponse response) throws IOException {
+        InputStream inputStream  = new FileInputStream(int_url);
+        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
-    @PostMapping ("/external/http/post/{int_url}")
-    public void HTTPExternalPost(@PathVariable("ext_url") String int_url) throws IOException {
+    @PostMapping ("/external/http/post")
+    public ResponseEntity<String> HTTPExternalPost(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new RuntimeException("You must select the a file for uploading");
+        }
+        InputStream inputStream = file.getInputStream();
+        String originalName = file.getOriginalFilename();
+        String name = file.getName();
+        String contentType = file.getContentType();
+        long size = file.getSize();
+        FileOutputStream outputStream = new FileOutputStream(new File("./data/http/"+originalName));
+        outputStream.write(file.getInputStream().readAllBytes());
+        outputStream.close();
+        return new ResponseEntity<String>(originalName, HttpStatus.OK);
     }
 
 }
