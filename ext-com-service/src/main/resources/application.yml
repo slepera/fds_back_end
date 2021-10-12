@@ -7,10 +7,10 @@ spring:
 
 sftp:
   server_host: localhost
-  server_port: 3333
+  server_port: 222
   server_username: test
   server_password: password
   client_host: localhost
-  client_port: 3333
+  client_port: 333
   client_username: test
   client_password: password

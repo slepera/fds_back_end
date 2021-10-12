@@ -2,6 +2,7 @@ package com;
 
 
 import com.services.LogClient;
+import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.sftp.server.SftpSubsystemFactory;
@@ -40,8 +41,12 @@ public class SFTPServer {
         SftpSubsystemFactory factory = new SftpSubsystemFactory();
         factory.addSftpEventListener(new SFTPListener(logClient));
         sshd.setSubsystemFactories(Collections.singletonList(factory));
-        sshd.setPasswordAuthenticator((username, password, session) -> username.equals(ecApplicationConfiguration.getServer_username()) && password.equals(ecApplicationConfiguration.getServer_password()));
         //sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(path2));
+        VirtualFileSystemFactory fileSystemFactory = new VirtualFileSystemFactory();
+        fileSystemFactory.setDefaultHomeDir(Paths.get(System.getProperty("user.dir")+"/data/sftp"));
+        sshd.setFileSystemFactory(fileSystemFactory);
+
+        sshd.setPasswordAuthenticator((username, password, session) -> username.equals(ecApplicationConfiguration.getServer_username()) && password.equals(ecApplicationConfiguration.getServer_password()));
         sshd.start();
     }
 
