@@ -19,11 +19,12 @@ public class SFTPClient {
     public void PutFile(String path) throws IOException {
         SshClient client = SshClient.setUpDefaultClient();
         client.start();
+        String[] filePath = path.split("/");
         try (ClientSession session = client.connect(ECApplicationConfiguration.getClient_username(), ECApplicationConfiguration.getClient_host(), ECApplicationConfiguration.getClient_port()).verify(1000).getSession()) {
             session.addPasswordIdentity(ECApplicationConfiguration.getClient_password());
             session.auth().verify();
             try (SftpClient sftp = DefaultSftpClientFactory.INSTANCE.createSftpClient(session)) {
-                OutputStream outputStream = sftp.write(path);
+                OutputStream outputStream = sftp.write(filePath[filePath.length-1]);
                 FileInputStream fileInputStream = new FileInputStream(new File(path));
                 int i;
                 while((i = fileInputStream.read())!=-1)
@@ -42,12 +43,13 @@ public class SFTPClient {
     public void GetFile(String path) throws IOException {
         SshClient client = SshClient.setUpDefaultClient();
         client.start();
+        String[] filePath = path.split("/");
         try (ClientSession session = client.connect(ECApplicationConfiguration.getClient_username(), ECApplicationConfiguration.getClient_host(), ECApplicationConfiguration.getClient_port()).verify(1000).getSession()) {
             session.addPasswordIdentity(ECApplicationConfiguration.getClient_password());
             session.auth().verify();
             try (SftpClient sftp = DefaultSftpClientFactory.INSTANCE.createSftpClient(session)) {
                 InputStream inputStream = sftp.read(path);
-                FileOutputStream fileOutputStream = new FileOutputStream(new File("data/sftp/"+path));
+                FileOutputStream fileOutputStream = new FileOutputStream(new File("data/sftp/"+filePath[filePath.length-1]));
                 int i;
                 while((i = inputStream.read())!=-1)
                 {

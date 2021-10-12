@@ -22,15 +22,15 @@ public class ExtComRestController {
     @Autowired
     private SFTPClient sftpClient;
 
-    @PutMapping ("/sftp/put/{id}")
-    public ResponseEntity<String> SFTPClientPut(@PathVariable("id") String id) throws IOException {
-        sftpClient.PutFile(id);
+    @PutMapping ("/sftp/put")
+    public ResponseEntity<String> SFTPClientPut(@RequestParam("path") String path) throws IOException {
+        sftpClient.PutFile(path);
         return ResponseEntity.ok("OK");
     }
 
-    @GetMapping ("/sftp/get/{id}")
-    public void SFTPClientGet(@PathVariable("id") String id) throws IOException {
-        sftpClient.GetFile(id);
+    @GetMapping ("/sftp/get")
+    public void SFTPClientGet(@RequestParam("path") String path) throws IOException {
+        sftpClient.GetFile(path);
     }
 
     @GetMapping("/internal/http/get")
