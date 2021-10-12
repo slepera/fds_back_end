@@ -1,6 +1,7 @@
 package com;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -48,10 +49,24 @@ public class ExtComRestController {
     public void HTTPInternalPost(@RequestParam("ext_url") String ext_url, @RequestParam("local_path") String local_path) throws IOException {
         System.out.println(ext_url);
         System.out.println(local_path);
+
+//        var xmlHttpRequest = new XMLHttpRequest();
+//
+//        var file = ...file handle...
+//        var fileName = ...file name...
+//        var target = ...target...
+//        var mimeType = ...mime type...
+//
+//        xmlHttpRequest.open('POST', target, true);
+//        xmlHttpRequest.setRequestHeader('Content-Type', mimeType);
+//        xmlHttpRequest.setRequestHeader('Content-Disposition', 'attachment; filename="' + fileName + '"');
+//        xmlHttpRequest.send(file);
+
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new File(local_path));
+        body.add("file", new FileSystemResource(local_path));
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         String serverUrl = ext_url;
         RestTemplate restTemplate = new RestTemplate();
