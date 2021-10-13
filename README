@@ -3,9 +3,8 @@ Ports, endpoints and methods:
     - GET users/all: get all registered users (auth token required);
     - POST auth/login: sign in a user (requires email and password in JSON body);
     - POST auth/register: register a new user (requires email and password in JSON body);
-    - GET ecs/sftp_client/get/{file_name}: retrieve a file through sftp protocol (auth token required);
-    - PUT ecs/sftp_client/put/{file_name}: send a file through sftp protocol (auth token required);
-    - PUT users/put/{file_name}: example of cross request between different services;
+OLD    - GET ecs/sftp_client/get/{file_name}: retrieve a file through sftp protocol (auth token required);
+OLD    - PUT ecs/sftp_client/put/{file_name}: send a file through sftp protocol (auth token required);
 
 Direct access to specific service (do not need auth token, HTTP to be used):
 gateway --> 8443
@@ -14,3 +13,9 @@ users --> 9002
 auth --> 9004
 ecs --> 9003
 log --> 9001
+
+Stubs Application:
+- GET http://localhost:9010/test/sftp_get?path={path} : gets a file from the "path" on the sftp external server and stores it
+    in a dedicated folder (data/sftp)
+- PUT http://localhost:9010/test/sftp_put?path={path} : puts the file from the local "path" into the sftp external server
+- PUT http://localhost:9010/test/http_post_file_server (with file in body): puts a file in /data/stub/http/

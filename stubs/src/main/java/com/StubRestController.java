@@ -67,13 +67,13 @@ public class StubRestController {
          });
      }
 
-    @PutMapping(value = "/test/sftp_put/{path}")
-    public String sftp_put(@PathVariable String path) {
+    @PutMapping(value = "/test/sftp_put")
+    public ResponseEntity<String> sftp_put(@RequestParam("path") String path) {
         return ecClient.putSftp(path);
     }
 
-    @GetMapping(value = "/test/sftp_get/{path}")
-    public String sftp_get(@PathVariable String path) {
+    @GetMapping(value = "/test/sftp_get")
+    public ResponseEntity<String> sftp_get(@RequestParam("path") String path) {
         return ecClient.getSftp(path);
     }
 

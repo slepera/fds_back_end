@@ -24,13 +24,12 @@ public class ExtComRestController {
 
     @PutMapping ("/sftp/put")
     public ResponseEntity<String> SFTPClientPut(@RequestParam("path") String path) throws IOException {
-        sftpClient.PutFile(path);
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(sftpClient.PutFile(path));
     }
 
     @GetMapping ("/sftp/get")
-    public void SFTPClientGet(@RequestParam("path") String path) throws IOException {
-        sftpClient.GetFile(path);
+    public ResponseEntity<String> SFTPClientGet(@RequestParam("path") String path) throws IOException {
+        return ResponseEntity.ok(sftpClient.GetFile(path));
     }
 
     @GetMapping("/internal/http/get")

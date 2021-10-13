@@ -16,7 +16,7 @@ public class SFTPClient {
 
     @Autowired
     private ECApplicationConfiguration ECApplicationConfiguration;
-    public void PutFile(String path) throws IOException {
+    public String PutFile(String path) throws IOException {
         SshClient client = SshClient.setUpDefaultClient();
         client.start();
         String[] filePath = path.split("/");
@@ -24,8 +24,8 @@ public class SFTPClient {
             session.addPasswordIdentity(ECApplicationConfiguration.getClient_password());
             session.auth().verify();
             try (SftpClient sftp = DefaultSftpClientFactory.INSTANCE.createSftpClient(session)) {
-                OutputStream outputStream = sftp.write(filePath[filePath.length-1]);
                 FileInputStream fileInputStream = new FileInputStream(new File(path));
+                OutputStream outputStream = sftp.write(filePath[filePath.length-1]);
                 int i;
                 while((i = fileInputStream.read())!=-1)
                 {
@@ -35,12 +35,14 @@ public class SFTPClient {
                 fileInputStream.close();
             } catch (Exception e){
                 System.out.println(e);
+                return "File not Found";
             }
         }
+        return "OK";
     }
 
 
-    public void GetFile(String path) throws IOException {
+    public String GetFile(String path) throws IOException {
         SshClient client = SshClient.setUpDefaultClient();
         client.start();
         String[] filePath = path.split("/");
@@ -59,8 +61,10 @@ public class SFTPClient {
                 inputStream.close();
             }catch (Exception e){
                 System.out.println(e);
+                return "File not Found";
             }
         }
+        return "ok";
     }
 
 
