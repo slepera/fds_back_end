@@ -13,7 +13,6 @@
         <module>gateway-service</module>
         <module>user-service</module>
         <module>log-service</module>
-        <module>auth-service</module>
         <module>ext-com-service</module>
         <module>common</module>
         <module>stubs</module>

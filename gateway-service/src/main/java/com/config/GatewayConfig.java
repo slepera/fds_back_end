@@ -22,10 +22,6 @@ public class GatewayConfig {
                         .filters(f -> f.filter(filter).stripPrefix(1))
                         .uri("lb://user-service"))
 
-                .route("auth-service", r -> r.path("/auth/**")
-                        .filters(f -> f.filter(filter))
-                        .uri("lb://auth-service"))
-
                 .route("ext-com-service", r -> r.path("/ecs/**")
                         .filters(f -> f.filter(filter).stripPrefix(1))
                         .uri("lb://ext-com-service"))

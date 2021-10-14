@@ -1,6 +1,6 @@
 package com.services;
 
-import com.entities.value_objects.UserVO;
+import com.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -43,7 +43,7 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-    public String generate(UserVO userVO, String type) {
+    public String generate(User userVO, String type) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userVO.getId());
         return doGenerateToken(claims, userVO.getEmail(), type);
