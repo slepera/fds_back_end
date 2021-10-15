@@ -1,6 +1,7 @@
 package com.controllers;
 
 import com.entities.Log;
+import com.entities.LogData;
 import com.services.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class LogController {
 
 
     @PostMapping
-    public Log save(@RequestBody Log logTable) {
+    public Log save(@RequestBody LogData logTable) {
         return logService.save(logTable);
     }
 
@@ -31,12 +32,12 @@ public class LogController {
 
     private ExecutorService log_thread = Executors.newFixedThreadPool(5);
     @GetMapping("/last/{id}")
-    public DeferredResult<List<Log>> getAll(@PathVariable long id) {
-        DeferredResult<List<Log>> output = new DeferredResult<>(-1L);
+    public DeferredResult<List<LogData>> getAll(@PathVariable long id) {
+        DeferredResult<List<LogData>> output = new DeferredResult<>(-1L);
         log_thread.execute(() -> {
             int loop_count = 0;
             try {
-                List<Log> res;
+                List<LogData> res;
                 while(((res = logService.findAllByLastId(id)).size()==0)&&(loop_count<10))
                 {
                     Thread.sleep(1000);
