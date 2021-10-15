@@ -2,6 +2,7 @@ package com.services;
 
 import com.entities.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,8 @@ import java.util.Date;
 
 @Service
 public class LogClient {
-
+    @Value("${spring.application.name}")
+    private String appName;
     private final RestTemplate restTemplateLogClient;
 
     @Autowired
@@ -26,7 +28,7 @@ public class LogClient {
 
 
 
-    public void sendLog(String level, String component, String message)
+    public void sendLog(String level, String message)
     {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -36,7 +38,7 @@ public class LogClient {
         Log log = new Log();
         log.level = level;
         log.date = formatter.format(date);
-        log.component = component;
+        log.component = appName;
         log.message = message;
 
         HttpEntity<Log> request =

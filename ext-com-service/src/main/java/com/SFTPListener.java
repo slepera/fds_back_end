@@ -44,7 +44,7 @@ public class SFTPListener implements SftpEventListener {
     @Override
     public void closing(ServerSession session, String remoteHandle, Handle localHandle){
         System.out.println("File size: " +  SFTPListener.data_len);
-        logClient.sendLog("Info", "External Communication Service", "File "+" successfully transferred");
+        logClient.sendLog("Info",  "File "+" successfully transferred");
         SFTPListener.data_len = 0;
     }
 

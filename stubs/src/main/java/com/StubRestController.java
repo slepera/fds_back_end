@@ -79,7 +79,7 @@ public class StubRestController {
 
     @GetMapping(value = "/test/log")
     public String testLog(){
-        this.logClient.sendLog( "Info", "StubService",  "TestLog");
+        this.logClient.sendLog( "Info",   "TestLog");
         return "Test log ok";
     }
 }
